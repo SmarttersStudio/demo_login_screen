@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget{
+class LoginPage extends StatefulWidget{
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool obscureText = true;
+  String value='';
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -9,7 +16,6 @@ class LoginPage extends StatelessWidget{
       body: Column(
         children: <Widget>[
           Container(
-            child: Image.network('https://toppng.com/public/uploads/preview/captain-america-shield-11562876445wyksv46tdg.png'),
             //TO Decorate the container
             decoration: BoxDecoration(
               // FOr multiple colors
@@ -64,14 +70,33 @@ class LoginPage extends StatelessWidget{
               ),
               elevation: 10,
               child: TextField(
+                onChanged: (v){
+                  setState(() {
+                    value = v;
+                  });
+                },
+                obscureText: obscureText,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.vpn_key),
+                  suffixIcon: IconButton(
+                    icon: Icon(obscureText?Icons.visibility:Icons.visibility_off),
+                    onPressed: (){
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    }),
                   border: InputBorder.none
                 ),
               ),
             ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 30,right:30),
+            width: width,
+            height: 10,
+            color: getColor(),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -127,4 +152,14 @@ class LoginPage extends StatelessWidget{
     );
   }
 
+  Color getColor() {
+    if(value.isEmpty)
+      return Colors.transparent;
+    else if(value.length<6)
+      return Colors.red;
+    else if(value.length<8)
+      return Colors.orange;
+    else
+      return Colors.green;
+  }
 }
